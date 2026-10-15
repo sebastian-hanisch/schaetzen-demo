@@ -101,3 +101,8 @@ def test_world_helpers():
 
 def test_trimmed_ate_with_an_empty_support_is_nan():
     assert math.isnan(W.trimmed_ate(W.World(gamma=0.8), 0.5))
+
+
+def test_trimmed_ate_without_trimming_is_exactly_the_ate():
+    w = W.World(gamma=2.5, tau1=0.4)
+    assert W.trimmed_ate(w, 0.0) == W.ate(w) and W.trimmed_ate(w, -0.1) == W.ate(w)

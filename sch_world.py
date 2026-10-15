@@ -80,6 +80,9 @@ def att(w: World) -> float:
 
 def trimmed_ate(w: World, c: float) -> float:
     """Durchschnittliche Wirkung auf der Stützung c < e(X) < 1 − c (die Schätzgröße der gekappten Gewichtung)."""
+    if c <= 0.0:
+        return ate(w)                      # ohne Kappung zählt jede Einheit (der Neigungswert sättigt numerisch bei 1)
+
     def inside(x):
         p = propensity(x, w)
         return ((p > c) & (p < 1.0 - c)).astype(float)
