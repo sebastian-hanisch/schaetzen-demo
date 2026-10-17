@@ -1,5 +1,7 @@
 # Schätzen: vier Wege zur Zahl – Streamlit-Demo
 
+**[→ Demo live ausprobieren](https://sebastianhanisch-schaetzen-demo.streamlit.app/)**
+
 Sechstes Stück der Linie **Kausale Diagramme und Adjustierung** in der „Konzepte“-Reihe im Portfolio von [Sebastian Hanisch](https://sebastianhanisch.net) (Operations Research und Machine Learning). Nachfolger von [adjustierungsmenge-demo](https://github.com/sebastian-hanisch/adjustierungsmenge-demo): Dort stand, welche Mengen gültig sind und welche die genaueste ist. Hier steht, wie man eine feste Menge in eine Schätzung übersetzt, und welche zweite Annahme jeder Weg verlangt.
 
 ## Kernfrage
@@ -94,4 +96,4 @@ Streamlit Cloud: Python 3.12.
 
 Gebaut mit Streamlit, Plotly, numpy, pandas und fpdf2.
 
-Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zu den Demos: [Interaktive Demos](https://sebastianhanisch.net/demos.html).
+Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zur Reihe: [Kausale Diagramme: von Konfundierung bis Wahl](https://sebastianhanisch.net/konzepte-kausale-diagramme.html).
