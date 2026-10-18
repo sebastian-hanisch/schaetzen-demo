@@ -1,4 +1,4 @@
-"""Vehikel: Zuteilung, Ergebnis, Wahrheit in geschlossener Form und Grenzwert der Regression."""
+"""Vehikel: Zuteilung, Ergebnis, Wahrheit per Quadratur und Grenzwert der Regression."""
 
 import math
 

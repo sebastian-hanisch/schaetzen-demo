@@ -61,10 +61,10 @@ PRESETS = {
     "Zuteilung gekrümmt, Modell richtig": preset(delta=1.0, ps_quad=True),
 }
 PRESET_HELP = {
-    "Grundfall (Voreinstellung)": "Moderate Zuteilung, lineares Ergebnis, konstante Wirkung: Alle Schätzer treffen, der naive Vergleich liegt um 0,6 daneben.",
+    "Grundfall (Voreinstellung)": "Moderate Zuteilung, lineares Ergebnis, konstante Wirkung: Alle Schätzer liegen nahe an der Wirkung (Schichten mit K = 5 etwas darüber), der naive Vergleich liegt um 0,6 daneben.",
     "Krümmung und Versatz": "Das Ergebnis ist im Störfaktor gekrümmt und die Zuteilung asymmetrisch: Die lineare Regression und die mit Wechselwirkung verfehlen die Wirkung stark.",
-    "Heterogene Wirkung": "Die Wirkung hängt vom Störfaktor ab: Die lineare Regression schätzt eine gewichtete Wirkung (mit p(1 − p)), nicht den Durchschnitt.",
-    "Knappe Überlappung": "Starke Zuteilung: Die Hälfte der Einheiten hat einen Neigungswert unter 0,05 oder über 0,95. Gewichten und Matching leiden, die Regression nicht.",
+    "Heterogene Wirkung": "Die Wirkung hängt vom Störfaktor ab: Die lineare Regression schätzt eine gewichtete Wirkung (die Gewichte hängen von der Zuteilung ab, im gesättigten Fall p(1 − p)), nicht den Durchschnitt.",
+    "Knappe Überlappung": "Starke Zuteilung: Die Hälfte der Einheiten hat einen Neigungswert unter 0,05 oder über 0,95. Gewichten und Matching leiden, die Regression nicht, solange ihr Ergebnismodell stimmt.",
     "Zuteilung gekrümmt": "Die Zuteilung hängt quadratisch vom Störfaktor ab, das Neigungsmodell ist linear: Das Gewichten ist verzerrt, Regression und Schichten nicht.",
-    "Zuteilung gekrümmt, Modell richtig": "Wie zuvor, aber das Neigungsmodell enthält den quadratischen Term: Das Gewichten ist wieder fast richtig, auf Kosten der Überlappung.",
+    "Zuteilung gekrümmt, Modell richtig": "Wie zuvor, aber das Neigungsmodell enthält den quadratischen Term: Das Gewichten ist deutlich weniger verzerrt (im Mittel +0,07 statt −0,16), auf Kosten der Überlappung.",
 }

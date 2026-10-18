@@ -1,4 +1,4 @@
-"""Vehikel: ein Standort wählt die neue Regel B (T = 1) abhängig von der Schwankung X; Ergebnis Servicegrad Y. Wahrheit in geschlossener Form
+"""Vehikel: ein Standort wählt die neue Regel B (T = 1) abhängig von der Schwankung X; Ergebnis Servicegrad Y. Wahrheit numerisch exakt
 (Gauss-Hermite-Quadratur über X). Nur numpy und der Generator der Linie, kein Streamlit.
 
 Modell: X ~ N(0, 1); P(T = 1 | X) = Φ(γ X + δ (X² − 1) + Versatz); Y = β X + Krümmung (X² − 1) + (τ0 + τ1 X) T + σ ε.

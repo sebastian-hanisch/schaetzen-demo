@@ -2,7 +2,7 @@
 Sebastian Hanisch - Operations Research und Machine Learning
 
 Sechstes Stück der Linie Kausale Diagramme und Adjustierung. Dieselbe Adjustierung (ein stetiger Störfaktor), vier Wege zur Zahl: Regression, Gewichten mit dem
-Neigungswert, Schichten, Matching. Das Vehikel steht in sch_world.py (Wahrheit in geschlossener Form), die Schätzer in sch_estimators.py.
+Neigungswert, Schichten, Matching. Das Vehikel steht in sch_world.py (Wahrheit numerisch exakt per Quadratur), die Schätzer in sch_estimators.py.
 
 Lauffähig mit: streamlit run app.py
 """
@@ -85,7 +85,7 @@ st.markdown(
 **Dieselbe Adjustierung, vier Wege zur Zahl, und jeder hat seine Annahme.** Dies ist das sechste Stück der Linie **Kausale Diagramme und Adjustierung**. Die Stücke davor haben
 gesagt, welche Variablen man festhält; hier steht, wie man das in eine Schätzung übersetzt: **Regression** (ein Modell für das Ergebnis), **Gewichten** und **Schichten**
 (ein Modell für die Zuteilung, der **Neigungswert**) und **Matching** (Vergleich mit ähnlichen Einheiten). Der Störfaktor ist stetig, die Behandlung binär, die Wahrheit steht
-in geschlossener Form fest.
+numerisch exakt (Quadratur) fest.
 
 Weiter unten: vier Experimente (**🔬**), **🚧 Wo die Annahmen enden** und der Expander **📐 Mathematische Formulierung**.
 """
@@ -95,10 +95,10 @@ with st.expander("So liest man die Schätzer", expanded=True):
     st.markdown(
         """
 1. **Regression.** Ergebnis auf Behandlung und Störfaktor: richtig, wenn die Form des Ergebnisses stimmt. Ohne Wechselwirkung schätzt sie bei heterogener Wirkung eine
-   **gewichtete** Wirkung (Gewicht p(1 − p)), nicht den Durchschnitt.
+   **gewichtete** Wirkung (die Gewichte hängen von der Zuteilung ab, im gesättigten Fall p(1 − p)), nicht den Durchschnitt.
 2. **Gewichten.** Jede Einheit zählt mit dem Kehrwert ihrer Zuteilungswahrscheinlichkeit: richtig, wenn das Zuteilungsmodell stimmt, und instabil bei knapper Überlappung.
-3. **Schichten.** Vergleich innerhalb von Gruppen gleichen Neigungswerts: je mehr Schichten, desto weniger Restverzerrung, desto weniger Einheiten je Schicht.
-4. **Matching.** Jede Einheit bekommt die ähnlichste der anderen Gruppe als Partner: ohne Modell, aber nur so gut wie die Ähnlichkeit, die es gibt.
+3. **Schichten.** Vergleich innerhalb von Gruppen gleichen Neigungswerts: je mehr Schichten, desto weniger Restverzerrung, desto weniger Einheiten je Schicht; die Annahme steckt im Neigungsmodell.
+4. **Matching.** Jede Einheit bekommt die ähnlichste der anderen Gruppe als Partner: ohne Ergebnismodell (hier aber im geschätzten Neigungswert, also mit einem Zuteilungsmodell), und nur so gut wie die Ähnlichkeit, die es gibt.
         """
     )
 
@@ -221,7 +221,7 @@ if st.session_state.get("coverage_ready"):
     verdict(verdict_coverage(res4))
     st.dataframe([{"Szenario": label, "Schätzer": SHORT[name], "Deckung": f"{de(100 * res4[label][name]['cover'], 0)} %", "mittlere Breite": de(res4[label][name]["width"], 2)}
                   for label in ("Grundfall", "knappe Überlappung") for name in COVER_NAMES], hide_index=True, width="stretch")
-    st.caption("Das Bootstrap-Intervall des Matching ist bekannt unzuverlässig (Abadie und Imbens 2008, aus dem Gedächtnis); beim Gewichten bricht es mit den Gewichten zusammen.")
+    st.caption("Für das Bootstrap-Intervall des Matching ist ein Ausfall bekannt (Abadie und Imbens 2008, aus dem Gedächtnis); hier zeigt sich eine Unterdeckung beim Matching erst bei knapper Überlappung, und beim Gewichten bricht das Intervall mit den Gewichten ein.")
 
 st.markdown("---")
 
@@ -235,8 +235,8 @@ st.markdown(
 | **Positivität: jede Einheit könnte beides bekommen** | Bei knapper Überlappung brechen Gewichten und Matching ein; die Regression extrapoliert über die Lücke und ist dort nur so gut wie ihr Modell (Experiment 1 und 2). | Wie falsch darf das Diagramm sein? |
 | **Das Ergebnismodell stimmt (Regression)** | Mit Krümmung und asymmetrischer Zuteilung verfehlt die lineare Regression die Wirkung um mehr als die Hälfte (Experiment 1). | Doppelt robust und Double ML |
 | **Das Zuteilungsmodell stimmt (Gewichten)** | Mit gekrümmter Zuteilung und linearem Neigungsmodell ist das Gewichten verzerrt (Szenario S5). | Doppelt robust und Double ML |
-| **Alle Störfaktoren sind beobachtet** | Ein verborgener Störfaktor verzerrt jeden Schätzer; die Daten allein zeigen es nicht. | Frontdoor, Instrumente, Sensitivität und Falsifikation |
-| **Ein stetiger Störfaktor** | Mit vielen Störfaktoren wird Matching in hohen Dimensionen dünn (Fluch der Dimension); die Demo hat einen. | nicht gebaut |
+| **Alle Störfaktoren sind beobachtet** | Ein verborgener Störfaktor verzerrt die hier gezeigten Schätzer, sofern er Zuteilung und Ergebnis bewegt; die Daten allein zeigen es nicht. | Frontdoor, Instrumente, Sensitivität und Falsifikation |
+| **Ein stetiger Störfaktor** | Mit vielen Störfaktoren wird Matching auf den Kovariaten dünn (Fluch der Dimension); ein Neigungswert-Matching verlagert das Problem in das Neigungsmodell. Die Demo hat einen Störfaktor. | nicht gebaut |
 | **Einheiten beeinflussen sich nicht** | Interferenz zwischen Standorten wird nicht modelliert. | nicht gebaut |
 """
 )
@@ -247,12 +247,12 @@ with st.expander("📐 Mathematische Formulierung"):
     st.markdown(
         r"""
 **Modell.** $X \sim N(0,1)$; $P(T=1\mid X) = \Phi(\gamma X + \delta(X^2-1) + a)$; $Y = \beta X + c\,(X^2-1) + (\tau_0 + \tau_1 X)\,T + \sigma\varepsilon$. Die **Zielgrößen**:
-$\mathrm{ATE} = \mathbb E[\tau(X)] = \tau_0$ und $\mathrm{ATT} = \tau_0 + \tau_1\,\mathbb E[X \mid T=1]$, beide in geschlossener Form (Quadratur) gerechnet.
+$\mathrm{ATE} = \mathbb E[\tau(X)] = \tau_0$ und $\mathrm{ATT} = \tau_0 + \tau_1\,\mathbb E[X \mid T=1]$, beide numerisch exakt per Quadratur gerechnet (der ATE ist $\tau_0$ selbst).
 
 **Neigungswert.** $e(x) = P(T=1\mid X=x)$; die Demo schätzt ihn mit einer logistischen Regression auf $(1, X)$ oder $(1, X, X^2)$.
 
 **Regression.** Koeffizient von $T$ in $Y \sim 1 + T + X$ (Wechselwirkung: $+ T\,X$, quadratisch: $+ X^2, T X^2$, $X$ zentriert). Ohne Wechselwirkung gewichtet er $\tau(x)$ mit
-$\mathrm{Var}(T \mid X=x)$ (Angrist 1998).
+zuteilungsabhängigen Gewichten; bei gesättigtem Kovariatenmodell sind es $\mathrm{Var}(T \mid X=x)$ (Angrist 1998).
 
 **Gewichten.** $\hat\tau_{\mathrm{IPW}} = \frac1n \sum_i \big(\tfrac{T_i Y_i}{e_i} - \tfrac{(1-T_i)Y_i}{1-e_i}\big)$; normiert: gewichtete Mittel je Gruppe mit $w_i = T_i/e_i$ bzw.
 $(1-T_i)/(1-e_i)$. Gekappt: nur $c < e_i < 1-c$; die Schätzgröße ist dann $\mathbb E[\tau(X) \mid c < e(X) < 1-c]$.
